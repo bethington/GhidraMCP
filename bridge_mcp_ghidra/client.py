@@ -271,7 +271,7 @@ class GhidraHTTPClient:
 			String response from the server
 		"""
 		# Validate server URL for security  
-		if not self.validate_server_url(self.server_url):
+		if not validate_server_url(self.server_url):
 			self.logger.error(f"Invalid or unsafe server URL: {self.server_url}")
 			return "Error: Invalid server URL - only local addresses allowed"
 
