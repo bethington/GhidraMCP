@@ -77,10 +77,10 @@ public final class DocumentFunctionComplete extends Handler {
 	 */
 	private String documentFunctionComplete(String functionAddress, String newName, String prototype,
 										   String callingConvention, Map<String, String> variableRenames,
-										   Map<String, String> variableTypes, List<Map<String, String>> labels,
-										   String plateComment, List<Map<String, String>> decompilerComments,
-										   List<Map<String, String>> disassemblyComments) {
-		Program program = getCurrentProgram();
+									   Map<String, String> variableTypes, List<Map<String, String>> labels,
+									   String plateComment, List<Map<String, String>> decompilerComments,
+									   List<Map<String, String>> disassemblyComments) {
+		Program program = getCurrentProgram(tool);
 		if (program == null) {
 			return "{\"error\": \"No program loaded\"}";
 		}
@@ -205,12 +205,12 @@ public final class DocumentFunctionComplete extends Handler {
 							if (commentAddr != null && commentText != null) {
 								Address cAddr = program.getAddressFactory().getAddress(commentAddr);
 								if (cAddr != null) {
-									program.getListing().setComment(cAddr, CodeUnit.PRE_COMMENT, commentText);
-									commentsSet++;
-									// Log progress every 10 comments
-									if (commentsSet % 10 == 0) {
-										Msg.info(this, "Progress: " + commentsSet + "/" + totalComments + " decompiler comments set");
-									}
+								program.getListing().setComment(cAddr, CodeUnit.PRE_COMMENT, commentText);
+								commentsSet++;
+								// Log progress every 10 comments
+								if (commentsSet % 10 == 0) {
+									Msg.info(this, "Progress: " + commentsSet + "/" + decompilerComments.size() + " decompiler comments set");
+								}
 								}
 							}
 						}

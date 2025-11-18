@@ -1,5 +1,7 @@
 package com.lauriewired.handlers.comments;
 
+import static ghidra.program.util.GhidraProgramUtilities.getCurrentProgram;
+
 import com.lauriewired.handlers.Handler;
 import com.sun.net.httpserver.HttpExchange;
 import ghidra.framework.plugintool.PluginTool;

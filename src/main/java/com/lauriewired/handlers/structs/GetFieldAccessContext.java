@@ -1,5 +1,8 @@
 package com.lauriewired.handlers.structs;
 
+import static com.lauriewired.GhidraMCPPlugin.MAX_FIELD_OFFSET;
+import static com.lauriewired.GhidraMCPPlugin.MAX_FIELD_EXAMPLES;
+
 import com.lauriewired.handlers.Handler;
 import com.sun.net.httpserver.HttpExchange;
 import ghidra.framework.plugintool.PluginTool;
@@ -66,7 +69,7 @@ public final class GetFieldAccessContext extends Handler {
 		try {
 			SwingUtilities.invokeAndWait(() -> {
 				try {
-					Program program = getCurrentProgram();
+					Program program = getCurrentProgram(tool);
 					if (program == null) {
 						result.set("{\"error\": \"No program loaded\"}");
 						return;

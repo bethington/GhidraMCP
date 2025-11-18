@@ -5,8 +5,8 @@ import com.sun.net.httpserver.HttpExchange;
 import ghidra.framework.plugintool.PluginTool;
 import ghidra.program.model.address.AddressSetView;
 import ghidra.program.model.listing.*;
-import ghidra.program.model.symbol.Function;
-import ghidra.program.model.symbol.FunctionManager;
+import ghidra.program.model.listing.Function;
+import ghidra.program.model.listing.FunctionManager;
 import ghidra.program.model.symbol.Reference;
 import ghidra.program.model.symbol.ReferenceIterator;
 

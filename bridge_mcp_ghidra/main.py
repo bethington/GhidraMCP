@@ -1,8 +1,9 @@
 import argparse
 import logging
-from mcp import FastMCP
+from fastmcp import FastMCP
 from .client import GhidraHTTPClient
 from .context import DEFAULT_GHIDRA_SERVER
+from .tools import register_all_tools
 
 def main():
 	parser = argparse.ArgumentParser(description="MCP server for Ghidra")
@@ -23,6 +24,9 @@ def main():
 
 	client = GhidraHTTPClient(ghidra_server_url)
 	mcp = FastMCP(ghidra_server_url)
+	
+	# Register all Ghidra tools
+	register_all_tools(mcp)
 	
 	if args.transport == "sse":
 		try:

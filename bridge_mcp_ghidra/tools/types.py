@@ -1,7 +1,6 @@
 import json
 from mcp.server.fastmcp import FastMCP
 from ..context import ghidra_context, GhidraValidationError, validate_hex_address
-from .strings import inspect_memory_content
 
 def _verify_content_before_classification(address: str) -> dict:
 	"""
@@ -24,8 +23,9 @@ def _verify_content_before_classification(address: str) -> dict:
 	"""
 
 	try:
-		# Use inspect_memory_content to check what the data actually contains
-		result = inspect_memory_content(address, length=64, detect_strings=True)
+		# Call the inspect_memory_content endpoint directly via HTTP client
+		params = {"address": address, "length": 64, "detect_strings": True}
+		result = ghidra_context.http_client.safe_get("inspect_memory_content", params)
 		data = json.loads(result)
 
 		verification = {

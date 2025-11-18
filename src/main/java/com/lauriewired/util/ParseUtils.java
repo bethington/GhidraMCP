@@ -1,5 +1,6 @@
 package com.lauriewired.util;
 
+import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import ghidra.program.model.address.Address;
 import ghidra.util.Msg;

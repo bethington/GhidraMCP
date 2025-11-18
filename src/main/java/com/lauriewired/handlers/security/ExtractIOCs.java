@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
 import java.util.Set;
 
 import static com.lauriewired.util.ParseUtils.*;
+import static com.lauriewired.util.GhidraUtils.*;
 import static ghidra.program.util.GhidraProgramUtilities.getCurrentProgram;
 
 public final class ExtractIOCs extends Handler {
@@ -42,7 +43,7 @@ public final class ExtractIOCs extends Handler {
 	 * @return A JSON string containing the extracted IOCs.
 	 */
 	private String extractIOCs() {
-		Program program = getCurrentProgram();
+		Program program = getCurrentProgram(tool);
 		if (program == null) {
 			return "Error: No program loaded";
 		}

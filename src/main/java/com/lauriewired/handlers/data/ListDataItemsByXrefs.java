@@ -9,7 +9,7 @@ import ghidra.program.model.listing.Data;
 import ghidra.program.model.listing.DataIterator;
 import ghidra.program.model.listing.Program;
 import ghidra.program.model.mem.MemoryBlock;
-import ghidra.program.model.ref.ReferenceManager;
+import ghidra.program.model.symbol.ReferenceManager;
 
 import java.io.IOException;
 import java.util.ArrayList;

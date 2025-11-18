@@ -10,7 +10,6 @@ import java.util.Map;
 import static com.lauriewired.util.GhidraUtils.renameDataAtAddress;
 import static com.lauriewired.util.ParseUtils.parsePostParams;
 import static com.lauriewired.util.ParseUtils.sendResponse;
-import static ghidra.program.util.GhidraProgramUtilities.getCurrentProgram;
 
 /**
  * Handler for renaming data at a specific address in the current program.
@@ -37,7 +36,7 @@ public final class RenameData extends Handler {
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
 		Map<String, String> params = parsePostParams(exchange);
-		String result = renameDataAtAddress(params.get("address"), params.get("newName"));
-		sendResponse(exchange, result);
+		renameDataAtAddress(tool, params.get("address"), params.get("newName"));
+		sendResponse(exchange, "Success");
 	}
 }

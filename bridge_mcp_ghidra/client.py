@@ -55,17 +55,60 @@ class GhidraConnectionError(Exception):
 	"""Raised when connection to Ghidra server fails"""
 	pass
 
+def cached_request(cache_duration: int = 300):
+	"""
+	Decorator to cache HTTP requests for specified duration.
+
+	Args:
+		cache_duration: Cache time-to-live in seconds (default: 300 = 5 minutes)
+
+	Returns:
+		Decorated function with caching capability
+	"""
+	def decorator(func):
+		cache: dict[str, tuple[Any, float]] = {}
+		
+		@wraps(func)
+		def wrapper(self, *args: Any, **kwargs: Any):
+			if not ENABLE_CACHING:
+				return func(self, *args, **kwargs)
+				
+			key = cache_key(*args, **kwargs)
+			now = time.time()
+			
+			# Check cache
+			if key in cache:
+				result, timestamp = cache[key]
+				if now - timestamp < cache_duration:
+					self.logger.debug(f"Cache hit for {func.__name__}")
+					return result
+				else:
+					del cache[key]  # Expired
+			
+			# Execute and cache
+			result = func(self, *args, **kwargs)
+			cache[key] = (result, now)
+			
+			# Simple cache cleanup (keep only most recent items)
+			if len(cache) > CACHE_SIZE:
+				oldest_key = min(cache.keys(), key=lambda k: cache[k][1])
+				del cache[oldest_key]
+				
+			return result
+		return wrapper
+	return decorator
+
 class GhidraHTTPClient:
 	T = TypeVar('T')
 	
-	def __init__(self, server_url: str, timeout: int):
-		self.adapter = HTTPAdapter(max_retries=self.retry_strategy, pool_connections=20, pool_maxsize=20)
+	def __init__(self, server_url: str, timeout: int = REQUEST_TIMEOUT):
 		self.logger = logging.getLogger('GhidraHTTPClient')
 		self.retry_strategy = Retry(
 			total=MAX_RETRIES,
 			backoff_factor=RETRY_BACKOFF_FACTOR,
 			status_forcelist=[429, 500, 502, 503, 504],
 		)
+		self.adapter = HTTPAdapter(max_retries=self.retry_strategy, pool_connections=20, pool_maxsize=20)
 		self.server_url = server_url
 		self.session = requests.Session()
 		self.timeout = timeout
@@ -76,49 +119,6 @@ class GhidraHTTPClient:
 			level=getattr(logging, LOG_LEVEL.upper(), logging.INFO),
 			format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 		)
-
-	def cached_request(self, cache_duration: int = 300) -> Callable[[Callable[..., T]], Callable[..., T]]:
-		"""
-		Decorator to cache HTTP requests for specified duration.
-
-		Args:
-			cache_duration: Cache time-to-live in seconds (default: 300 = 5 minutes)
-
-		Returns:
-			Decorated function with caching capability
-		"""
-		def decorator(self, func: Callable[..., GhidraHTTPClient.T]) -> Callable[..., GhidraHTTPClient.T]:
-			cache: dict[str, tuple[GhidraHTTPClient.T, float]] = {}
-			
-			@wraps(func)
-			def wrapper(*args: Any, **kwargs: Any) -> GhidraHTTPClient.T:
-				if not ENABLE_CACHING:
-					return func(*args, **kwargs)
-					
-				key = cache_key(*args, **kwargs)
-				now = time.time()
-				
-				# Check cache
-				if key in cache:
-					result, timestamp = cache[key]
-					if now - timestamp < cache_duration:
-						self.logger.debug(f"Cache hit for {func.__name__}")
-						return result
-					else:
-						del cache[key]  # Expired
-				
-				# Execute and cache
-				result = func(*args, **kwargs)
-				cache[key] = (result, now)
-				
-				# Simple cache cleanup (keep only most recent items)
-				if len(cache) > CACHE_SIZE:
-					oldest_key = min(cache.keys(), key=lambda k: cache[k][1])
-					del cache[oldest_key]
-					
-				return result
-			return wrapper
-		return decorator
 	
 	@cached_request(cache_duration=180)  # 3-minute cache for GET requests
 	def safe_get(self, endpoint: str, params: dict = None, retries: int = 3) -> list:

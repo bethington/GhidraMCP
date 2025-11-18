@@ -1,7 +1,10 @@
 # GhidraMCP - Production Dependencies
 # Install with: pip install -r requirements.txt
 
-# Core MCP server framework
+# FastMCP - high-level MCP server framework
+fastmcp>=2.0.0,<3.0.0
+
+# Core MCP server framework (dependency of fastmcp)
 mcp>=1.5.0,<2.0.0
 
 # HTTP client library

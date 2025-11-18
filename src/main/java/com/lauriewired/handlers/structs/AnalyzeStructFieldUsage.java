@@ -23,6 +23,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.HashMap;
 import java.util.HashSet;
+
+import static com.lauriewired.util.GhidraUtils.*;
 import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.Set;
@@ -215,7 +217,7 @@ public final class AnalyzeStructFieldUsage extends Handler {
 		try {
 			SwingUtilities.invokeAndWait(() -> {
                 try {
-                    Program program = getCurrentProgram();
+                    Program program = getCurrentProgram(tool);
                     if (program == null) {
                         result.set("{\"error\": \"No program loaded\"}");
                         return;

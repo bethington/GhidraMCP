@@ -8,6 +8,7 @@ import ghidra.program.model.listing.Program;
 import ghidra.program.model.mem.Memory;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import static com.lauriewired.util.ParseUtils.*;

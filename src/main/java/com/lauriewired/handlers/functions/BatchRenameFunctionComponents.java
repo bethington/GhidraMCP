@@ -10,11 +10,11 @@ import ghidra.program.model.listing.Function;
 import ghidra.program.model.listing.Parameter;
 import ghidra.program.model.listing.Program;
 import ghidra.program.model.symbol.SourceType;
-import ghidra.program.model.symbol.Variable;
+import ghidra.program.model.listing.Variable;
 import ghidra.util.Msg;
 
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicBoolean;;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.Map;
 import javax.swing.*;

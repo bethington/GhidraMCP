@@ -42,7 +42,7 @@ public final class RenameFunctionByAddress extends Handler {
 		Map<String, String> params = parsePostParams(exchange);
 		String functionAddress = params.get("function_address");
 		String newName = params.get("new_name");
-		String result = renameFunctionByAddress(functionAddress, newName);
+		String result = renameFunctionByAddress(functionAddress, newName) ? "Success" : "Failed";
 		sendResponse(exchange, result);
 	}
 

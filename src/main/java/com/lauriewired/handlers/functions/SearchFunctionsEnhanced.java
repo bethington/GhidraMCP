@@ -66,7 +66,7 @@ public final class SearchFunctionsEnhanced extends Handler {
 	private String searchFunctionsEnhanced(String namePattern, Integer minXrefs, Integer maxXrefs,
 										  String callingConvention, Boolean hasCustomName, boolean regex,
 										  String sortBy, int offset, int limit) {
-		Program program = getCurrentProgram();
+		Program program = getCurrentProgram(tool);
 		if (program == null) {
 			return "{\"error\": \"No program loaded\"}";
 		}

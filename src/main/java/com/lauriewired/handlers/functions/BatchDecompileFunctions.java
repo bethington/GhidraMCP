@@ -11,6 +11,7 @@ import ghidra.program.model.listing.Program;
 import ghidra.program.model.symbol.Symbol;
 import ghidra.program.model.symbol.SymbolIterator;
 import ghidra.program.model.symbol.SymbolTable;
+import ghidra.program.model.symbol.SymbolType;
 
 import java.io.IOException;
 import java.util.Map;
@@ -45,7 +46,7 @@ public final class BatchDecompileFunctions extends Handler {
 	 * @return JSON string with function names as keys and decompiled code or error messages as values.
 	 */
 	private String batchDecompileFunctions(String functionsParam) {
-		Program program = getCurrentProgram();
+		Program program = getCurrentProgram(tool);
 		if (program == null) {
 			return "Error: No program loaded";
 		}

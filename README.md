@@ -60,7 +60,7 @@ First, download the latest [release](https://github.com/DaCodeChick/GhidraMCP/re
 
 ### Server Configuration
 - *Optional*: Configure the server port in CodeBrowser via `Edit` → `Tool Options` → `GhidraMCP HTTP Server`
-- Default server address: `http://127.0.0.1:8080/`
+- Default server address: `http://127.0.0.1:8089/`
 - The HTTP server only runs when:
   - CodeBrowser is open
   - A program is loaded
@@ -144,27 +144,31 @@ To set up Claude Desktop as a Ghidra MCP client, go to `Claude` -> `Settings` ->
     "ghidra": {
       "command": "python",
       "args": [
-        "/ABSOLUTE_PATH_TO/bridge_mcp_ghidra.py",
+        "-m",
+        "bridge_mcp_ghidra.main",
         "--ghidra-server",
-        "http://127.0.0.1:8080/"
-      ]
+        "http://127.0.0.1:8089/"
+      ],
+      "cwd": "/ABSOLUTE_PATH_TO/GhidraMCP"
     }
   }
 }
 ```
 
-Alternatively, edit this file directly:
-```
-/Users/YOUR_USER/Library/Application Support/Claude/claude_desktop_config.json
-```
+**Important**: Replace `/ABSOLUTE_PATH_TO/GhidraMCP` with the actual path to your GhidraMCP directory.
 
-The server IP and port are configurable and should be set to point to the target Ghidra instance. If not set, both will default to localhost:8080.
+Alternatively, edit this file directly:
+- **macOS**: `/Users/YOUR_USER/Library/Application Support/Claude/claude_desktop_config.json`
+- **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+
+The server IP and port are configurable and should be set to point to the target Ghidra instance. If not set, both will default to localhost:8089.
 
 ## Example 2: Cline
-To use GhidraMCP with [Cline](https://cline.bot), this requires manually running the MCP server as well. First run the following command:
+To use GhidraMCP with [Cline](https://cline.bot), this requires manually running the MCP server as well. First, navigate to your GhidraMCP directory and run the following command:
 
-```
-python bridge_mcp_ghidra.py --transport sse --mcp-host 127.0.0.1 --mcp-port 8081 --ghidra-server http://127.0.0.1:8080/
+```bash
+cd /path/to/GhidraMCP
+python -m bridge_mcp_ghidra.main --transport sse --mcp-host 127.0.0.1 --mcp-port 8081 --ghidra-server http://127.0.0.1:8089/
 ```
 
 The only *required* argument is the transport. If all other arguments are unspecified, they will default to the above. Once the MCP server is running, open up Cline and select `MCP Servers` at the top.
@@ -181,7 +185,9 @@ Another MCP client that supports multiple models on the backend is [5ire](https:
 
 1. Tool Key: ghidra
 2. Name: GhidraMCP
-3. Command: `python /ABSOLUTE_PATH_TO/bridge_mcp_ghidra.py`
+3. Command: `cd /ABSOLUTE_PATH_TO/GhidraMCP && python -m bridge_mcp_ghidra.main`
+
+**Note**: Replace `/ABSOLUTE_PATH_TO/GhidraMCP` with the actual path to your GhidraMCP directory.
 
 ## Example 4: VSCode (GitHub Copilot)
 GitHub Copilot's agent mode can connect to MCP servers over both stdio and sse. To set up GhidraMCP as a "tool" in VSCode's Copilot chat, you need to first make sure you are in "Agent" mode. Then, click on the tools icon in the chat box:
@@ -192,7 +198,19 @@ In the drop down menu that appears, select "Add More Tools" and then "Add MCP Se
 
 ![image](https://github.com/user-attachments/assets/9c7482d1-5cc5-4fa2-9bf4-e47b2a352304)
 
-Select "Command (stdio)" and enter `python3 C:\path\to\bridge_mcp_ghidra.py --ghidra-server http://localhost:8080/` as the command. Make sure to replace the path to the Python script with the actual path on your machine.
+Select "Command (stdio)" and enter the command for your platform:
+
+**Windows**:
+```
+cd C:\path\to\GhidraMCP ; python -m bridge_mcp_ghidra.main --ghidra-server http://localhost:8089/
+```
+
+**macOS/Linux**:
+```
+cd /path/to/GhidraMCP && python -m bridge_mcp_ghidra.main --ghidra-server http://localhost:8089/
+```
+
+Make sure to replace the path with the actual path to your GhidraMCP directory.
 
 ![image](https://github.com/user-attachments/assets/400ae37c-4b9f-4101-a52b-eb316b09411d)
 

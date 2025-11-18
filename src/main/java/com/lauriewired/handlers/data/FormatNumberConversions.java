@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.Map;
 
 import static com.lauriewired.util.ParseUtils.*;
-import static ghidra.program.util.GhidraProgramUtilities.getCurrentProgram;
 
 /**
  * Handler for converting and formatting numbers in various representations.
@@ -34,7 +33,7 @@ public final class FormatNumberConversions extends Handler {
 		Map<String, String> qparams = parseQueryParams(exchange);
 		String text = qparams.get("text");
 		int size = parseIntOrDefault(qparams.get("size"), 4);
-		sendResponse(exchange, formatNumberConversion(text, size));
+		sendResponse(exchange, formatNumberConversions(text, size));
 	}
 	
 	/**

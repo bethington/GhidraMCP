@@ -1,8 +1,10 @@
 package com.lauriewired.handlers.functions;
 
+import static com.lauriewired.GhidraMCPPlugin.DECOMPILE_TIMEOUT_SECONDS;
+
 import com.lauriewired.handlers.Handler;
 import com.sun.net.httpserver.HttpExchange;
-import ghidra.app.decompiler.ConsoleTaskMonitor;
+import ghidra.util.task.ConsoleTaskMonitor;
 import ghidra.app.decompiler.DecompileResults;
 import ghidra.app.decompiler.DecompInterface;
 import ghidra.framework.plugintool.PluginTool;
